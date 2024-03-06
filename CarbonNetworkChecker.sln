@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonNetworkChecker", "CarbonNetworkChecker\CarbonNetworkChecker.csproj", "{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0AB499C-85CD-49C9-A759-D292149F688C}
+	EndGlobalSection
+EndGlobal
