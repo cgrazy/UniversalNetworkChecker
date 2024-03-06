@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1706.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonNetworkChecker", "CarbonNetworkChecker\CarbonNetworkChecker.csproj", "{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalNetworkChecker", "UniversalNetworkChecker\UniversalNetworkChecker.csproj", "{FA4EA299-C9E7-41A0-B85F-311FBC188D9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
