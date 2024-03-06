@@ -3,11 +3,11 @@ using System.Net.NetworkInformation;
 
 Dictionary<string, CarbonNetworkCheckerResult> results = new Dictionary<string, CarbonNetworkCheckerResult>();
 
-Console.WriteLine("Carbon Network Checker");
+Console.WriteLine("Universal Network Checker");
 
 JsonFileWrapper jfw = new JsonFileWrapper();
 
-jfw.LoadJson("CarbonNetworkCheckerConfig.json");
+jfw.LoadJson("UniversalNetworkCheckerConfig.json");
 
 
 jfw.HostsToCheck.ForEach(h =>
@@ -70,7 +70,9 @@ void DumpOutputDeep(Hosts host)
 {
     Console.WriteLine("                                                                         ");
     Console.SetCursorPosition(0, Console.CursorTop - 1);
-    Console.WriteLine($"hostname: {host.Hostname}, IP: {host.IP}, avg: {results[host.Hostname].PingRoundtripTime.Average()} ms, failed {results[host.Hostname].PingSuccess.Count(i=>!i)} times.");
+    int fails = results[host.Hostname].PingSuccess.Count(i => !i);
+    Double percentage = results[host.Hostname].PingSuccess.Count(i => !i) / results[host.Hostname].PingSuccess.Count *100;
+    Console.WriteLine($"hostname: {host.Hostname}, IP: {host.IP}, avg: {string.Format("{0:F2}",results[host.Hostname].PingRoundtripTime.Average())} ms, failed {fails} times ({percentage} %).");
 
 }
 
@@ -78,7 +80,7 @@ void DumpOutput(Hosts host)
 {
     Console.WriteLine("                                                                         ");
     Console.SetCursorPosition(0, Console.CursorTop - 1);
-    Console.WriteLine($"hostname: {host.Hostname}, IP: {host.IP}, avg: {results[host.Hostname].PingRoundtripTime.Average()} ms ");
+    Console.WriteLine($"hostname: {host.Hostname}, IP: {host.IP}, avg: {string.Format("{0:F2}", results[host.Hostname].PingRoundtripTime.Average())} ms ");
 
 }
 
