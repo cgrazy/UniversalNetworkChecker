@@ -7,6 +7,12 @@ Console.WriteLine("Universal Network Checker");
 
 JsonFileWrapper jfw = new JsonFileWrapper();
 
+if(args.Length != 1)
+{
+    Usage();
+    return;
+}
+
 string fileToLoad = string.Empty;
 if (Path.IsPathRooted(args[0]))
 {
@@ -14,7 +20,9 @@ if (Path.IsPathRooted(args[0]))
 }
 else
 {
+#pragma warning disable CS8604 // Possible null reference argument.
     fileToLoad = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), args[0]);
+#pragma warning restore CS8604 // Possible null reference argument.
 }
 
 if (!File.Exists(fileToLoad))
@@ -42,7 +50,7 @@ while (!Console.KeyAvailable)
 {
     jfw.HostsToCheck.ForEach(h =>
     {
-        UniversalNetworkCheckerResult tmp;
+        UniversalNetworkCheckerResult? tmp;
         if(!resultsContainer.Results.TryGetValue(h.Hostname, out tmp))
         {
             resultsContainer.Results.Add(h.Hostname, new UniversalNetworkCheckerResult(h.Hostname, h.IP));
@@ -85,4 +93,10 @@ PingReply DoPing(Host host)
     var pingResult = ping.Send(host.IP, 1000, packageSize);
     
     return pingResult;
+}
+
+void Usage()
+{
+    Console.WriteLine($"Usage: {Environment.NewLine}");
+    Console.WriteLine($"dotnet UniversalNetworkChecker.dll <file>");
 }

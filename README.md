@@ -8,6 +8,8 @@ In a first version UniversalNetworkChecker just pings these hosts periodically u
 
 For every success a '_' is printed, in case of failure '|'. Up to 20 pings are reported in that way. After any key has been pressed, the time of failure is printed.
 
+### Usage
+
 ````text
 dotnet UniversalNetworkChecker.dll UniversalNetworkCheckerConfig.json
 Universal Network Checker
@@ -39,3 +41,10 @@ hostname: B, IP: 10.81.76.94,  avg: 0,00 ms , Result: |||||||||||||||||||| _
 hostname: C, IP: 192.168.10.200,  avg: 0,00 ms , Result: ||||||||||||||||||||
  Failure times: 13:02:58, 13:03:00, 13:03:02, 13:03:04, 13:03:06, 13:03:08, 13:03:10, 13:03:12, 13:03:14, 13:03:16, 13:03:18, 13:03:20, 13:03:22, 13:03:24, 13:03:26, 13:03:28, 13:03:30, 13:03:32, 13:03:34, 13:03:36, 13:03:38
 ````
+
+### Change Log
+**Version history**
+
+| **Version**  | **Comment**  |
+|:-----|:-----|  
+| 0.0.1 | first draft | 

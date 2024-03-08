@@ -40,15 +40,15 @@ namespace UniversalNetworkCheckerTests
             jsonFileWrapper.LoadJson("abc");
 
 
-            Assert.IsNull(jsonFileWrapper.HostsToCheck);
+            Assert.IsTrue(jsonFileWrapper.HostsToCheck.Count == 0);
         }
 
         private List<Host> CreateListOfHost()
         {
-            return new List<Host>
+           return new List<Host>
            {
-               new Host(),
-               new Host()
+               new Host() { Hostname = "host1", IP = "1.2.3.4" },
+               new Host() { Hostname = "host2", IP = "1.2.3.5" }
            };
         }
     }

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 internal class JsonFileWrapper
 {
-    internal List<Host> HostsToCheck;
+    internal List<Host> HostsToCheck = new List<Host>();
 
     internal IFileWrapper myFileWrapper;
 
