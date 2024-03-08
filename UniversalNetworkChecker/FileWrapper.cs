@@ -1,7 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
-internal class FileWrapper
+
+public interface IFileWrapper
 {
-    internal bool Exists(string fileName)
+    bool Exists(string fileName);
+}
+
+internal class FileWrapper : IFileWrapper
+{
+    public virtual bool Exists(string fileName)
     {
         return File.Exists(fileName);
     }

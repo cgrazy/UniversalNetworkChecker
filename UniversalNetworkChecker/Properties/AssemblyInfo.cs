@@ -16,4 +16,5 @@ using System.Security.Cryptography.X509Certificates;
 //[assembly: AssemblyKeyFile("")]
 
 [assembly: InternalsVisibleTo("UniversalNetworkCheckerTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
