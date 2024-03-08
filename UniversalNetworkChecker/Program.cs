@@ -1,17 +1,29 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Net.NetworkInformation;
+using System.Reflection;
 
 
 Console.WriteLine("Universal Network Checker");
 
 JsonFileWrapper jfw = new JsonFileWrapper();
 
-string fileToLoad = args[0];
+string fileToLoad = string.Empty;
+if (Path.IsPathRooted(args[0]))
+{
+    fileToLoad = args[0];
+}
+else
+{
+    fileToLoad = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), args[0]);
+}
+
 if (!File.Exists(fileToLoad))
 {
     Console.WriteLine($"The given file {fileToLoad} doesn't exists.");
     return;
 }
+
+Console.WriteLine($"{fileToLoad}{Environment.NewLine}");
 
 jfw.LoadJson(fileToLoad);
 
