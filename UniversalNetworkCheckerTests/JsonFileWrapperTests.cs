@@ -25,7 +25,7 @@ namespace UniversalNetworkCheckerTests
 		}
 
         [TestMethod]
-        public void JsonFileWrapper_ExistingFile_HostsToCheckIsNull()
+        public void JsonFileWrapper_ExistingFile_HostsToCheckIsEmpty()
         {
             var moqJsonFileReaderStub = new Mock<JsonFileReader>();
 
