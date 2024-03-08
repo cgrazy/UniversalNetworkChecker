@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 internal class JsonFileWrapper
 {
-    internal List<Hosts> HostsToCheck;
+    internal List<Host> HostsToCheck;
 
     internal async void LoadJson(string fileName)
     {
@@ -13,7 +13,7 @@ internal class JsonFileWrapper
         }
         else
         {
-            List<Hosts> items = JsonFileReader.Read(fileName);
+            List<Host> items = JsonFileReader.Read(fileName);
 
             HostsToCheck = items;
         }
@@ -22,10 +22,10 @@ internal class JsonFileWrapper
 
 internal class JsonFileReader
 {
-    internal static List<Hosts> Read(string file)
+    internal static List<Host> Read(string file)
     {
         string text = File.ReadAllText(file);
 
-        return JsonConvert.DeserializeObject<List<Hosts>>(text);
+        return JsonConvert.DeserializeObject<List<Host>>(text);
     }
 }
