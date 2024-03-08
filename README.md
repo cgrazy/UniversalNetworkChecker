@@ -48,3 +48,6 @@ hostname: C, IP: 192.168.10.200,  avg: 0,00 ms , Result: ||||||||||||||||||||
 | **Version**  | **Comment**  |
 |:-----|:-----|  
 | 0.0.1 | first draft | 
+
+### Status
+[![.NET](https://github.com/cgrazy/UniversalNetworkChecker/actions/workflows/dotnet.yml/badge.svg)](https://github.com/cgrazy/UniversalNetworkChecker/actions/workflows/dotnet.yml)
