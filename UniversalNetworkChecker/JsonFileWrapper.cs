@@ -5,9 +5,11 @@ internal class JsonFileWrapper
 {
     internal List<Host> HostsToCheck;
 
+    internal FileWrapper myFileWrapper = new FileWrapper();
+
     internal async void LoadJson(string fileName)
     {
-        if (!File.Exists(fileName))
+        if(myFileWrapper.Exists(fileName))
         {
             Console.WriteLine($"The file {fileName} doesn't exist.");
         }
