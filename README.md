@@ -1,5 +1,12 @@
 # UniversalNetworkChecker
 
+Tool to check accessability of different nodes in a network.
+
+A list of hosts are given in a json formated file which are checked.
+
+In a first version UniversalNetworkChecker just pings these hosts periodically until any key is pressed.
+
+For every success a '_' is printed, in case of failure '|'. Up to 20 pings are reported in that way. After any key has been pressed, the time of failure is printed.
 
 ````text
 dotnet UniversalNetworkChecker.dll UniversalNetworkCheckerConfig.json
