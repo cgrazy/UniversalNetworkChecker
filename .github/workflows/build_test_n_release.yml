@@ -20,13 +20,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Release
-      run: ${{ github.workspace }}/UniversalNetworkChecker/MakeRelease.cmd
-    - name: Upload .NET 8 Binaries
-      uses: actions/upload-artifact@v3
-      with:
-        name: Net8Binaries
-        path: ${{ github.workspace }}/bin/Release/UniversalNetworkChecker.zip
-        retention-days: 90    
+      run: UniversalNetworkChecker/MakeRelease.cmd
     - name: Upload .NET 7 Binaries
       uses: actions/upload-artifact@v3
       with:
