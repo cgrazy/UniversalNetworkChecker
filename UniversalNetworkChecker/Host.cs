@@ -7,12 +7,11 @@ public class Host
 {
     private string? myIP;
 
-    [NotNull]
-    public required string IP {
+    public required string? IP {
         get => myIP;
         set
         {
-            IPAddress ip;
+            IPAddress? ip;
             if(IPAddress.TryParse(value, out ip))
             {
                 myIP = value;

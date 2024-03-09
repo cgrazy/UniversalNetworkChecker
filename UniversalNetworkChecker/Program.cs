@@ -2,15 +2,32 @@
 using System.Net.NetworkInformation;
 using System.Reflection;
 
+ConsoleOutput consoleOutput = new();
+Action<string> OutputAction = (value) => consoleOutput.Print(value);
+Action<int, int> CuserAction = (x, y) => consoleOutput.SetCurserPosition(x, y);
 
-Console.WriteLine("Universal Network Checker");
+OutputAction.Invoke("Universal Network Checker");
+JsonFileWrapper jfw = new();
+jfw.OutputAction = OutputAction;
 
-JsonFileWrapper jfw = new JsonFileWrapper();
+PingWrapper pingWrapper = new();
 
-if(args.Length != 1)
+if(args.Length < 1)
 {
     Usage();
     return;
+}
+
+string outputFileName = string.Empty;
+
+if(args.Length == 3)
+{
+    if (string.Compare(args[1], "-out", StringComparison.InvariantCultureIgnoreCase)==0)
+    {
+        outputFileName = args[2];
+
+        OutputAction.Invoke($"Save output to file {outputFileName}.");
+    }
 }
 
 string fileToLoad = string.Empty;
@@ -27,20 +44,20 @@ else
 
 if (!File.Exists(fileToLoad))
 {
-    Console.WriteLine($"The given file {fileToLoad} doesn't exists.");
+    OutputAction.Invoke($"The given file {fileToLoad} doesn't exists.");
     return;
 }
 
-Console.WriteLine($"{fileToLoad}{Environment.NewLine}");
+OutputAction.Invoke($"{fileToLoad}{Environment.NewLine}");
 
 jfw.LoadJson(fileToLoad);
 
 jfw.HostsToCheck.ForEach(h =>
 {
-    Console.WriteLine($"Hostname: {h.Hostname}, IP: {h.IP}");
+    OutputAction.Invoke($"Hostname: {h.Hostname}, IP: {h.IP}");
 });
 
-Console.WriteLine("--------------------------");
+OutputAction.Invoke("--------------------------");
 
 int cnt = 0;
 
@@ -53,50 +70,57 @@ while (!Console.KeyAvailable)
         UniversalNetworkCheckerResult? tmp;
         if(!resultsContainer.Results.TryGetValue(h.Hostname, out tmp))
         {
+#pragma warning disable CS8604 // Possible null reference argument.
             resultsContainer.Results.Add(h.Hostname, new UniversalNetworkCheckerResult(h.Hostname, h.IP));
+#pragma warning restore CS8604 // Possible null reference argument.
         }
         else
         {
-            Task<PingReply> task =  new Task<PingReply>(()=>DoPing(h));
+            var task =  new Task<PingReply>(()=>pingWrapper.DoPing(h.IP));
 
             task.Start();
 
             task.WaitAsync(TimeSpan.FromSeconds(2));
             PingReply reply = task.Result;
 
-            Console.WriteLine($"Hostname: {h.Hostname}, IP: {h.IP}, Ping: {reply.Status}, {reply.RoundtripTime} ms");
+            OutputAction.Invoke($"Hostname: {h.Hostname}, IP: {h.IP}, Ping: {reply.Status}, {reply.RoundtripTime} ms");
 
             resultsContainer.AddResult(h.Hostname, reply);
 
-            Console.WriteLine(resultsContainer.Results[h.Hostname].GetOutputSting());
+            OutputAction.Invoke(resultsContainer.Results[h.Hostname].GetOutputSting());
         }
     });
 
-    if(++cnt>1)     Console.SetCursorPosition(0, Console.CursorTop - jfw.HostsToCheck.Count *2);
+    if(++cnt>1) CuserAction.Invoke(0, Console.CursorTop - jfw.HostsToCheck.Count *2);
 }
 
 jfw.HostsToCheck.ForEach(h =>
 {
-    Console.WriteLine("                                                                         ");
-    Console.SetCursorPosition(0, Console.CursorTop - 1);
+    OutputAction.Invoke("                                                                         ");
+    CuserAction.Invoke(0, Console.CursorTop - 1);
 
-    Console.WriteLine(resultsContainer.Results[h.Hostname].GetFullReport());
-
+    OutputAction.Invoke(resultsContainer.Results[h.Hostname].GetFullReport());
 });
 
-PingReply DoPing(Host host)
+if (outputFileName != string.Empty)
 {
-    var ping = new Ping();
+    var fileOutput = new FileOutput(outputFileName);
 
-    byte[] packageSize = new byte[64];
+    object lockObject = new object();
 
-    var pingResult = ping.Send(host.IP, 1000, packageSize);
-    
-    return pingResult;
+    for (int i = 0; i < jfw.HostsToCheck.Count; i++)
+    {
+        lock (lockObject)
+        {
+            fileOutput.Print(resultsContainer.Results[jfw.HostsToCheck[i].Hostname].GetFullReport());
+        }
+    }
 }
 
 void Usage()
 {
-    Console.WriteLine($"Usage: {Environment.NewLine}");
-    Console.WriteLine($"dotnet UniversalNetworkChecker.dll <file>");
+    OutputAction.Invoke($"Usage: {Environment.NewLine}");
+    OutputAction.Invoke($"dotnet UniversalNetworkChecker.dll <file> [-out <outputFile>]");
+    OutputAction.Invoke($"   <file>            : json file containg the hosts to check.");
+    OutputAction.Invoke($"   -out <outputFile> : output file where whole opuput is written to.");
 }

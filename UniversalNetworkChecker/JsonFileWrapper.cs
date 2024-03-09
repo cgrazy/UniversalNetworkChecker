@@ -11,6 +11,8 @@ internal class JsonFileWrapper
 
     internal IJsonFileReader myJsonFileReader;
 
+    internal Action<string> OutputAction { get; set; }
+
     //testability
     internal JsonFileWrapper(IFileWrapper fileWrapper, IJsonFileReader jsonFileReader)
     {
@@ -28,7 +30,7 @@ internal class JsonFileWrapper
     {
         if(!myFileWrapper.Exists(fileName))
         {
-            Console.WriteLine($"The file {fileName} doesn't exist.");
+            OutputAction.Invoke($"The file {fileName} doesn't exist.");
         }
         else
         {
@@ -50,6 +52,12 @@ internal class JsonFileReader : IJsonFileReader
     {
         string text = File.ReadAllText(file);
 
-        return JsonConvert.DeserializeObject<List<Host>>(text);
+        List<Host> returnedListOfHosts = new();
+
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+        returnedListOfHosts = JsonConvert.DeserializeObject<List<Host>>(text);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+
+        return returnedListOfHosts??new List<Host>();
     }
 }

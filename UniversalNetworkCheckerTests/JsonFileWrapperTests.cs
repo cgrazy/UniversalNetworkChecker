@@ -37,8 +37,8 @@ namespace UniversalNetworkCheckerTests
                 .Returns(CreateListOfHost());
 
             var jsonFileWrapper = new JsonFileWrapper(fileWrapperStub.Object, moqJsonFileReaderStub.Object);
+            jsonFileWrapper.OutputAction = (i)=>new ConsoleOutput().Print(i);
             jsonFileWrapper.LoadJson("abc");
-
 
             Assert.IsTrue(jsonFileWrapper.HostsToCheck.Count == 0);
         }
