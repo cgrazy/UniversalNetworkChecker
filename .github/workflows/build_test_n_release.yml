@@ -19,14 +19,11 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build -c Release --no-restore
-    - uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r UniversalNetworkChecker.zip -i /home/runner/work/UniversalNetworkChecker/UniversalNetworkChecker/UniversalNetworkChecker/bin/Release/net7.0
+    - name: Build Release
+      run: UniversalNetworkChecker/MakeRelease.cmd
     - name: Upload .NET 7 Binaries
       uses: actions/upload-artifact@v3
       with:
-          name: Net7Binaries
-          path: UniversalNetworkChecker.zip 
-          retention-days: 90        
+        name: Net7Binaries
+        path: ${{ github.workspace }}/bin/Release/UniversalNetworkChecker.zip
+        retention-days: 90        
