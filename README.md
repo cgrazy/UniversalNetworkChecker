@@ -13,10 +13,14 @@ For every success a '_' is printed, in case of failure '|'. Up to 20 pings are r
 ````
 dotnet UniversalNetworkChecker.dll <json> [ -out <outputFile> ]
 
-<json>					: json file containing all hosts to be checked
-[ -out <outputFile> ] 	: file the output shall be written to
+Universal Network Checker
+Usage:
 
-The tool runs until any key is pressed.
+dotnet UniversalNetworkChecker.dll <file> [-ping [-out <outputFile>] ] | [-nslookup | -nslu ]
+   <file>            : json file containg the hosts to check.
+   -ping             : uses the ping to check the hosts configured in <file>.
+   -nslookup | -nslu : do a nslookup for all ip address configured in <file>.
+   -out <outputFile> : output file where whole opuput is written to.
 
 ````
 
