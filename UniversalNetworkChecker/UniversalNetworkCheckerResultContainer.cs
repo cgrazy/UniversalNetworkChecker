@@ -9,11 +9,11 @@ internal class UniversalNetworkCheckerResultContainer
         Results = new Dictionary<string, UniversalNetworkCheckerResult>();
     }
 
-    internal void AddResult(string hostname, PingReply reply)
+    internal void AddResult(string hostname, PingReplyWrapper reply)
     {
-        Results[hostname].PingSuccess.Add((reply.Status == IPStatus.Success));
-        Results[hostname].PingRoundtripTime.Add(reply.RoundtripTime);
-        if (reply.Status != IPStatus.Success)
+        Results[hostname].PingSuccess.Add(reply.IsPingSuccessful);
+        Results[hostname].PingRoundtripTime.Add(reply.PingReply.RoundtripTime);
+        if (!reply.IsPingSuccessful)
             Results[hostname].PingFailureTimes.Add(DateTime.Now);
     }
 }

@@ -18,11 +18,15 @@ internal class FileWrapper : IFileWrapper
 
     public virtual void Open(string fileName)
     {
-        File.Open(string.Format($"""{fileName}"""), FileMode.OpenOrCreate);
+        File.Open( string.Format($"""{fileName}"""), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
     }
 
     public virtual void WriteLine(string fileName, string output)
     {
-        File.AppendAllText(fileName, output+Environment.NewLine);
+        object lockObject = new object();
+        lock (lockObject)
+        {
+            File.AppendAllText(fileName, output + Environment.NewLine);
+        }
     }
 }

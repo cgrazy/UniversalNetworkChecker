@@ -5,6 +5,17 @@ using System.Net;
 
 public class Host
 {
+    public Host()
+    {
+
+    }
+
+    public Host(string host, string ip)
+    {
+        Hostname = host;
+        IP = ip;
+    }
+
     private string? myIP;
 
     public required string? IP {
