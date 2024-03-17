@@ -9,9 +9,9 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
     internal bool WasRun { get; private set; }
 
-    internal string Hostname { get; private set; }
+    internal string? Hostname { get; private set; }
 
-    internal NsLookupCommand(List<string> args, IDnsWrapper dnsWrapperTestable): base(args)
+    internal NsLookupCommand(List<string> args, IDnsWrapper dnsWrapperTestable) : base(args)
     {
         myDnsWrapper = dnsWrapperTestable;
     }
@@ -22,7 +22,7 @@ internal class NsLookupCommand : BaseCommand, ICommand
     }
 
 
-    public void Execute()
+    public new void Execute()
     {
         base.Execute();
 
@@ -30,9 +30,11 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
         base.PrintHeader();
 
-        base.JFW.HostsToCheck.ForEach(h =>
+        base.JFW.HostsToCheck?.ForEach(h =>
         {
+#pragma warning disable CS8604 // Possible null reference argument.
             string hostname = RetrieveHostnameFromIP(h.IP);
+#pragma warning restore CS8604 // Possible null reference argument.
 
             base.OutputAction?.Invoke($"{h.IP} => {hostname}");
 
@@ -48,8 +50,6 @@ internal class NsLookupCommand : BaseCommand, ICommand
         try
         {
             hostname = myDnsWrapper.GetHostEntry(ip);
-
-            OutputAction?.Invoke($"{hostname}");
         }
         catch (System.Net.Sockets.SocketException e)
         {

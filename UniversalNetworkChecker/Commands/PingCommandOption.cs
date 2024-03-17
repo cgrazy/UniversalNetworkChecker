@@ -19,11 +19,19 @@ internal class PingCommandOption : ArgsPars
             }
         }
     }
-
-    internal override void Run()
+    // not yet happy about the syntax
+    internal override void Run(UniversalNetworkCheckerResultContainer resultsContainer, IJsonFileWrapper jFW)
     {
-        base.Run();
+        base.Run(resultsContainer, jFW);
 
+        if (OutFile != string.Empty)
+        {
+            var fileOutput = new FileOutput(OutFile);
 
+            for (int i = 0; i < jFW.HostsToCheck?.Count; i++)
+            {
+                fileOutput.Print(resultsContainer.Results[jFW.HostsToCheck[i].Hostname].GetFullReport());
+            }
+        }
     }
 }

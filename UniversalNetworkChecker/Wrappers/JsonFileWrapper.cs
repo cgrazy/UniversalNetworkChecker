@@ -5,7 +5,7 @@
 
 internal class JsonFileWrapper : IJsonFileWrapper
 {
-    public List<Host> HostsToCheck { get; set; }
+    public List<Host>? HostsToCheck { get; set; }
 
     internal IFileWrapper myFileWrapper;
 

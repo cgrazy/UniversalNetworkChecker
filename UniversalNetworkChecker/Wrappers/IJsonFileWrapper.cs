@@ -3,9 +3,9 @@
 
 public interface IJsonFileWrapper
 {
-    public Action<string> OutputAction { get; set; }
+    public Action<string>? OutputAction { get; set; }
 
     public void LoadJson(string fileName);
 
-    public List<Host> HostsToCheck { get; set; }
+    public List<Host>? HostsToCheck { get; set; }
 }

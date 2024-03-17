@@ -10,7 +10,6 @@ namespace UniversalNetworkCheckerTests
 		[TestMethod]
 		public void PingSend_ReachableIP_ReturnsSuccess()
 		{
-			PingReply pingReply = null;
 			var pingWrapperStub = new Mock<IPingWrapper>();
 			pingWrapperStub.Setup(i => i.Send("127.0.0.1")).Returns(new PingReplyWrapperStub(true));
 
@@ -24,7 +23,6 @@ namespace UniversalNetworkCheckerTests
         [TestMethod]
         public void PingSend_UnreachableIP_ReturnsSuccess()
         {
-            PingReply pingReply = null;
             var pingWrapperStub = new Mock<IPingWrapper>();
             pingWrapperStub.Setup(i => i.Send("127.0.0.1")).Returns(new PingReplyWrapperStub(false));
 
@@ -38,9 +36,14 @@ namespace UniversalNetworkCheckerTests
 
     internal class PingReplyWrapperStub:IPingReplyWrapper
     {
-        public bool IsPingSuccessful { get; set; }
+        public bool? IsPingSuccessful { get; set; }
 
         public PingReply PingReply { get; set; }
+
+        public PingReplyWrapperStub()
+        {
+
+        }
 
         internal PingReplyWrapperStub(bool success)
         {

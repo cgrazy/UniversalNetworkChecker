@@ -11,9 +11,9 @@ internal class UniversalNetworkCheckerResultContainer
 
     internal void AddResult(string hostname, PingReplyWrapper reply)
     {
-        Results[hostname].PingSuccess.Add(reply.IsPingSuccessful);
+        Results[hostname].PingSuccess.Add(reply.IsPingSuccessful.Value);
         Results[hostname].PingRoundtripTime.Add(reply.PingReply.RoundtripTime);
-        if (!reply.IsPingSuccessful)
+        if (!reply.IsPingSuccessful.Value)
             Results[hostname].PingFailureTimes.Add(DateTime.Now);
     }
 }

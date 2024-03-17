@@ -18,12 +18,14 @@ public class Host
 
     private string? myIP;
 
+    private string? myHostname;
+
     public required string? IP {
         get => myIP;
         set
         {
             IPAddress? ip;
-            if(IPAddress.TryParse(value, out ip))
+            if (IPAddress.TryParse(value, out ip))
             {
                 myIP = value;
             }
@@ -34,6 +36,17 @@ public class Host
         }
     }
 
-    [NotNull]
-    public required string Hostname { get; set; }
+    public required string? Hostname
+    {
+        get => myHostname;
+        set
+        {
+            if(string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException($"No valid hostname giv en: {value}");
+            }
+
+            myHostname = value;
+        }
+    }
 }

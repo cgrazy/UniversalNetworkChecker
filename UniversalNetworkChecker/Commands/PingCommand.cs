@@ -3,7 +3,7 @@
 internal class PingCommand : BaseCommand, ICommand
 {
     internal const string CommandName = "-ping";
-
+    private const string Obj = "                                                                         ";
     PingCommandOption myPingCommandOption;
 
     internal PingCommand(List<string> args):base(args)
@@ -11,30 +11,18 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption = new PingCommandOption(args);
     }
 
-    public  void Parse()
+    public new void Parse()
     {
         base.Parse();
         myPingCommandOption.Parse();
     }
 
-    public void Execute()
+    public new void Execute()
     {
         base.Execute();
         if (!base.IsInitialized) return;
 
         PingWorker pingWrapper = new();
-
-        string outputFileName = string.Empty;
-
-        if (base.Args.Count == 3)
-        {
-            if (string.Compare(base.Args[1], "-out", StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
-                outputFileName = base.Args[2];
-
-                OutputAction?.Invoke($"Save output to file {outputFileName}.");
-            }
-        }
 
         PrintHeader();
 
@@ -44,7 +32,7 @@ internal class PingCommand : BaseCommand, ICommand
 
         while (!Console.KeyAvailable)
         {
-            base.JFW.HostsToCheck.ForEach(h =>
+            base.JFW.HostsToCheck?.ForEach(h =>
             {
                 UniversalNetworkCheckerResult? tmp;
                 if (!resultsContainer.Results.TryGetValue(h.Hostname, out tmp))
@@ -55,7 +43,9 @@ internal class PingCommand : BaseCommand, ICommand
                 }
                 else
                 {
+#pragma warning disable CS8604 // Possible null reference argument.
                     var task = new Task<IPingReplyWrapper>(() => pingWrapper.DoPing(h.IP));
+#pragma warning restore CS8604 // Possible null reference argument.
 
                     task.Start();
 
@@ -71,30 +61,23 @@ internal class PingCommand : BaseCommand, ICommand
 
             if (++cnt > 1)
             {
-                int offset = (Console.CursorTop - base.JFW.HostsToCheck.Count * 2);
+                int s = (JFW.HostsToCheck != null) ? JFW.HostsToCheck.Count : 0;
+                int offset = Console.CursorTop - s * 2;
 
                 CurserAction?.Invoke(0, offset);
             }
         }
 
-        base.JFW.HostsToCheck.ForEach(h =>
+        base.JFW.HostsToCheck?.ForEach(h =>
         {
-            OutputAction?.Invoke("                                                                         ");
+            OutputAction?.Invoke(Obj);
             CurserAction?.Invoke(0, Console.CursorTop - 1);
 
             OutputAction?.Invoke(resultsContainer.Results[h.Hostname].GetFullReport());
         });
 
-        OutputAction?.Invoke("                                                                         ");
-        
-        if(myPingCommandOption.OutFile != string.Empty)
-        {
-            var fileOutput = new FileOutput(myPingCommandOption.OutFile);
+        OutputAction?.Invoke(Obj);
 
-            for (int i = 0; i < base.JFW.HostsToCheck.Count; i++)
-            {
-                fileOutput.Print(resultsContainer.Results[base.JFW.HostsToCheck[i].Hostname].GetFullReport());
-            }
-        }
+        myPingCommandOption.Run(resultsContainer, JFW);
     }
 }

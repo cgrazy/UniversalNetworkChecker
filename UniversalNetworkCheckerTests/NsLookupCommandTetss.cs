@@ -25,8 +25,8 @@ namespace UniversalNetworkCheckerTests
 
     internal class JsonFileWrapperTestable : IJsonFileWrapper
     {
-        public Action<string> OutputAction { get; set; }
-        public List<Host> HostsToCheck { get; set; }
+        public Action<string>? OutputAction { get; set; }
+        public List<Host>? HostsToCheck { get; set; }
 
         public void LoadJson(string fileName)
         {

@@ -3,7 +3,7 @@ internal abstract class ArgsPars
 {
     internal const string ParaOutFile = "-out";
 
-    internal virtual void Run() { }
+    internal virtual void Run(UniversalNetworkCheckerResultContainer resultsContainer, IJsonFileWrapper jFW) { }
 
     internal Queue<string> myArguments;
 

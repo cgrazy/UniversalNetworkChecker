@@ -66,7 +66,7 @@ internal class BaseCommand : ICommand
     {
         Console.WriteLine("a");
 
-        JFW.HostsToCheck.ForEach(h =>
+        JFW.HostsToCheck?.ForEach(h =>
         {
             OutputAction?.Invoke($"Hostname: {h.Hostname}, IP: {h.IP}");
         });

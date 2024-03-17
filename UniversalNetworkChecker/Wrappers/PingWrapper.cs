@@ -43,22 +43,20 @@ internal class PingWrapper : IPingWrapper
 
         PingReplyWrapper pingReply = new PingReplyWrapper(ping.Send(ip, TimeOut, packageSize));
 
-
-
         return pingReply;
     }
 }
 
 public interface IPingReplyWrapper
 {
-    public bool IsPingSuccessful { get; set; }
+    public bool? IsPingSuccessful { get; set; }
     public PingReply PingReply { get; set; }
 }
 
 
 public class PingReplyWrapper : IPingReplyWrapper
 {
-    public bool IsPingSuccessful { get; set; }
+    public bool? IsPingSuccessful { get; set; }
 
     public PingReply PingReply { get; set; }
 
