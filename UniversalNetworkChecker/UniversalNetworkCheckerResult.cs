@@ -44,8 +44,8 @@
             failureTimes = string.Format($"{Environment.NewLine} Failure times: {GetFailureTimes()}");
         }
 
-
-        return string.Format($"hostname: {Hostname}, IP: {IP},  avg: {string.Format("{0:F2}", PingRoundtripTime.Average())} ms , Result: {lastTwentyResults} {failureTimes}");
+        double percentageLoss = ((double)PingFailureTimes.Count / (double)PingSuccess.Count) * (double)100;
+        return string.Format($"hostname: {Hostname}, IP: {IP},  avg: {string.Format("{0:F2}", PingRoundtripTime.Average())} ms , Result: {lastTwentyResults} ({string.Format("{0:F2}", percentageLoss)} % loss) {failureTimes}");
     }
 
     private string GetFailureTimes()

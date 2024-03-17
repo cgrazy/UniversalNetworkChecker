@@ -1,9 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 internal class PingCommandOption : ArgsPars
 {
+    internal const string AppendParameter = "-append";
+
     internal PingCommandOption(List<string> args) : base(args) { }
 
     internal string OutFile = string.Empty;
+    internal bool myAppendOutFile = false;
+
+    internal UniversalNetworkCheckerResultContainer Result { get; set; }
+    internal IJsonFileWrapper JFW { get; set; }
+    internal DateTime StartTime { get; set; }
 
     internal override void Parse()
     {
@@ -15,22 +22,30 @@ internal class PingCommandOption : ArgsPars
                 case ParaOutFile:
                     OutFile = myArguments.Dequeue();
                     break;
-
+                case AppendParameter:
+                    myAppendOutFile = true;
+                    break;
             }
         }
     }
-    // not yet happy about the syntax
-    internal override void Run(UniversalNetworkCheckerResultContainer resultsContainer, IJsonFileWrapper jFW)
+
+    internal override void Run()
     {
-        base.Run(resultsContainer, jFW);
+        base.Run();
 
         if (OutFile != string.Empty)
         {
             var fileOutput = new FileOutput(OutFile);
+            fileOutput.Append = myAppendOutFile;
+            fileOutput.EnsureOutputFile();
 
-            for (int i = 0; i < jFW.HostsToCheck?.Count; i++)
+            fileOutput.Print($"Start: {StartTime}");
+            fileOutput.Print($"End  : {DateTime.Now}");
+            fileOutput.Print($"-----------------------");
+
+            for (int i = 0; i < JFW.HostsToCheck?.Count; i++)
             {
-                fileOutput.Print(resultsContainer.Results[jFW.HostsToCheck[i].Hostname].GetFullReport());
+                fileOutput.Print(Result.Results[JFW.HostsToCheck[i].Hostname].GetFullReport());
             }
         }
     }

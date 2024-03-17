@@ -15,6 +15,7 @@ internal class PingCommand : BaseCommand, ICommand
     {
         base.Parse();
         myPingCommandOption.Parse();
+        myPingCommandOption.StartTime = DateTime.Now;
     }
 
     public new void Execute()
@@ -78,6 +79,9 @@ internal class PingCommand : BaseCommand, ICommand
 
         OutputAction?.Invoke(Obj);
 
-        myPingCommandOption.Run(resultsContainer, JFW);
+
+        myPingCommandOption.Result = resultsContainer;
+        myPingCommandOption.JFW = JFW;
+        myPingCommandOption.Run();
     }
 }

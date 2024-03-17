@@ -6,6 +6,8 @@ public interface IFileWrapper
 
     void Open(string fileName);
 
+    bool Delete(string fileName);
+
     void WriteLine(string fileName, string output);
 }
 
@@ -28,5 +30,12 @@ internal class FileWrapper : IFileWrapper
         {
             File.AppendAllText(fileName, output + Environment.NewLine);
         }
+    }
+
+    public virtual bool Delete(string fileName)
+    {
+        File.Delete(fileName);
+
+        return !File.Exists(fileName);
     }
 }

@@ -7,19 +7,28 @@ internal class FileOutput : IOutput
 
     FileWrapper myFileWrapper;
 
+    internal bool Append { get; set; }
+
     internal FileOutput(string fileName)
     {
         OutputFileName = fileName;
         myFileWrapper = new FileWrapper();
-        EnsureOutputFile();
+    
     }
 
-    private void EnsureOutputFile()
+    internal void EnsureOutputFile()
     {
         if(!myFileWrapper.Exists(OutputFileName))
         {
-            Console.WriteLine(OutputFileName);
             myFileWrapper.Open(OutputFileName);
+        }
+        else
+        {
+            if(!Append)
+            {
+                myFileWrapper.Delete(OutputFileName);
+                myFileWrapper.Open(OutputFileName);
+            }
         }
     }
 
@@ -30,6 +39,6 @@ internal class FileOutput : IOutput
 
     public void SetCurserPosition(int x, int y)
     {
-        //Console.SetCursorPosition(x, y);
+        throw new NotImplementedException("This method will never be implemented.");
     }
 }
