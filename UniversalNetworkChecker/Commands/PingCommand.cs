@@ -3,12 +3,27 @@
 internal class PingCommand : BaseCommand, ICommand
 {
     internal const string CommandName = "-ping";
+
     private const string Obj = "                                                                         ";
     PingCommandOption myPingCommandOption;
+
+    internal PingCommand():base() { }
 
     internal PingCommand(List<string> args):base(args)
     {
         myPingCommandOption = new PingCommandOption(args);
+    }
+
+    public string Usage()
+    {
+        return "[-ping [-out <outputFile> | -append ] ]";
+    }
+
+    public void Help()
+    {
+        OutputAction?.Invoke($"   -ping             : uses the ping to check the hosts configured in <file>.");
+        OutputAction?.Invoke($"      -out <outputFile> : output file where whole opuput is written to.");
+        OutputAction?.Invoke($"      -append : if not set a new file will be created, otherwise output will be appended.");
     }
 
     public new void Parse()

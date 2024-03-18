@@ -12,12 +12,13 @@ internal class DnsWrapper : IDnsWrapper
 {
     public virtual string GetHostEntry(string ip)
     {
-        string hostname = string.Empty;
+        return RetrieveHostNameOfIP(ip); ;
+    }
 
+    internal virtual string RetrieveHostNameOfIP(string ip)
+    {
         IPHostEntry ipHostEntry = Dns.GetHostEntry(ip);
 
-        hostname = ipHostEntry.HostName;
-
-        return hostname;
+        return ipHostEntry.HostName;
     }
 }

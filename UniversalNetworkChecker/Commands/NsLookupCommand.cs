@@ -11,6 +11,8 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
     internal string? Hostname { get; private set; }
 
+    internal NsLookupCommand():base() { }
+
     internal NsLookupCommand(List<string> args, IDnsWrapper dnsWrapperTestable) : base(args)
     {
         myDnsWrapper = dnsWrapperTestable;
@@ -21,6 +23,15 @@ internal class NsLookupCommand : BaseCommand, ICommand
         myDnsWrapper = new DnsWrapper();
     }
 
+    public string Usage()
+    {
+        return "[-nslookup | -nslu ]";
+    }
+
+    public void Help()
+    {
+        OutputAction?.Invoke($"   -nslookup | -nslu : do a nslookup for all ip address configured in <file>.");
+    }
 
     public new void Execute()
     {

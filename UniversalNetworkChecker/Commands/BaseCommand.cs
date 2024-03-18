@@ -12,6 +12,15 @@ internal class BaseCommand : ICommand
 
     internal bool IsInitialized { get;  set; }
 
+    internal BaseCommand()
+    {
+
+    }
+
+    public void Help() {  }
+
+    public string Usage() { return ""; }
+
     public BaseCommand(List<string> args)
     {
         JFW = new JsonFileWrapper();
@@ -33,7 +42,6 @@ internal class BaseCommand : ICommand
 
         if (Args.Count < 1)
         {
-            //Usage();
             return;
         }
 

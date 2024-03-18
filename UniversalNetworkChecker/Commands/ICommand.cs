@@ -10,4 +10,8 @@ public interface ICommand
     public void Execute();
 
     public void PrintHeader();
+
+    public void Help();
+
+    public string Usage();
 }

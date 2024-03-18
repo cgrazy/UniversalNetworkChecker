@@ -18,9 +18,11 @@
   <ItemGroup>
     <None Remove="Commands\" />
     <None Remove="Wrappers\" />
+    <None Remove="Output\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Wrappers\" />
+    <Folder Include="Output\" />
   </ItemGroup>
 </Project>
