@@ -25,6 +25,10 @@ internal class CommandFactory
                 case NsLookupCommand.CommandNameAlias:
                     usedCommand = new NsLookupCommand(myArgs);
                     break;
+                case TraceRouteCommand.CommandName:
+                case TraceRouteCommand.CommandNameAlias:
+                    usedCommand = new TraceRouteCommand(myArgs);
+                    break;
             }
             
         }

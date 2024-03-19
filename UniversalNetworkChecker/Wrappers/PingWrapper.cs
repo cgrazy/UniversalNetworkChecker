@@ -45,6 +45,15 @@ internal class PingWrapper : IPingWrapper
 
         return pingReply;
     }
+
+    public virtual IPingReplyWrapper Send(string ip, PingOptionsWrapper pow)
+    {
+        var ping = new Ping();
+
+        PingReplyWrapper pingReply = new PingReplyWrapper(ping.Send(ip, TimeOut, packageSize, pow.PingOptions));
+
+        return pingReply;
+    }
 }
 
 public interface IPingReplyWrapper

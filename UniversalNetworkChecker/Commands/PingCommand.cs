@@ -16,7 +16,7 @@ internal class PingCommand : BaseCommand, ICommand
 
     public string Usage()
     {
-        return "[-ping [-out <outputFile> | -append ] ]";
+        return "( -ping [-out <outputFile> ] [ -append ] )";
     }
 
     public void Help()
@@ -75,6 +75,8 @@ internal class PingCommand : BaseCommand, ICommand
                 }
             });
 
+            Delay();
+
             if (++cnt > 1)
             {
                 int s = (JFW.HostsToCheck != null) ? JFW.HostsToCheck.Count : 0;
@@ -98,5 +100,11 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption.Result = resultsContainer;
         myPingCommandOption.JFW = JFW;
         myPingCommandOption.Run();
+    }
+
+    private async void Delay()
+    {
+       Task t= Task.Delay(1000);
+       t.Wait();
     }
 }

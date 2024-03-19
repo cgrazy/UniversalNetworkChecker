@@ -24,15 +24,17 @@ internal class DummyCommand: ICommand
     {
         var pc = new PingCommand() { OutputAction = OutputAction };
         var nc = new NsLookupCommand() { OutputAction = OutputAction };
+        var tc = new TraceRouteCommand() { OutputAction = OutputAction };
 
         this.Help();
 
-        OutputAction?.Invoke($"dotnet UniversalNetworkChecker.dll <file> {pc.Usage()} | {nc.Usage()}");
+        OutputAction?.Invoke($"dotnet UniversalNetworkChecker.dll <file>  {pc.Usage()} | {nc.Usage()} | {tc.Usage()} ");
+         
         OutputAction?.Invoke($"   <file>            : json file containg the hosts to check.");
 
         pc.Help();
-
         nc.Help();
+        tc.Help();
     }
 }
 

@@ -11,7 +11,10 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
     internal string? Hostname { get; private set; }
 
-    internal NsLookupCommand():base() { }
+    internal NsLookupCommand():base()
+    {
+        myDnsWrapper = new DnsWrapper();
+    }
 
     internal NsLookupCommand(List<string> args, IDnsWrapper dnsWrapperTestable) : base(args)
     {
@@ -25,7 +28,7 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
     public string Usage()
     {
-        return "[-nslookup | -nslu ]";
+        return "( -nslookup | -nslu )";
     }
 
     public void Help()

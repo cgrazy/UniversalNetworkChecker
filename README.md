@@ -11,17 +11,16 @@ For every success a '_' is printed, in case of failure '|'. Up to 20 pings are r
 ### Usage
 
 ````
-dotnet UniversalNetworkChecker.dll <file> [-ping [-out <outputFile> | -append ] ] | [-nslookup | -nslu ]
-
-Universal Network Checker
 Usage:
 
+dotnet UniversalNetworkChecker.dll <file>  ( -ping [-out <outputFile> ] [ -append ] ) | ( -nslookup | -nslu ) | ( -traceroute | -tr [ -long ] )
    <file>            : json file containg the hosts to check.
    -ping             : uses the ping to check the hosts configured in <file>.
       -out <outputFile> : output file where whole opuput is written to.
-      -append           : if not set a new file will be created, otherwise output will be appended.
+      -append : if not set a new file will be created, otherwise output will be appended.
    -nslookup | -nslu : do a nslookup for all ip address configured in <file>.
-
+   -traceroute | -tr : do a traceroute for all hostnames configured in <file>.
+     -long : Also tries to do a nslookup for the route ip determined.
 ````
 
 **Example**
