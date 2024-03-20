@@ -48,14 +48,14 @@ dotnet UniversalNetworkChecker.dll UniversalNetworkCheckerConfig.json
 Universal Network Checker
 Hostname: A, IP: 192.168.10.3
 Hostname: B, IP: 192.168.10.100
-Hostname: C, IP: 192.168.10.200
+Hostname: www.google.de, IP: 8.8.8.8
 --------------------------
-Hostname: A, IP: 192.168.10.3, Ping: Success, 0 ms
-hostname: A, IP: 1192.168.10.3,  avg: 0,00 ms , Result: _____
+hostname: A, IP: 192.168.10.3, Ping: Success, 0 ms
+hostname: A, IP: 192.168.10.3,  avg: 0,00 ms , Result: ________|_
 Hostname: B, IP: 192.168.10.100, Ping: TimedOut, 0 ms
-hostname: B, IP: 192.168.10.100,  avg: 0,00 ms , Result: |||||
-Hostname: C, IP: 192.168.10.200, Ping: TimedOut, 0 ms
-hostname: C, IP: 192.168.10.200,  avg: 0,00 ms , Result: ||||
+hostname: B, IP: 192.168.10.100,  avg: 0,00 ms , Result: ________||
+Hostname: www.google.de, IP: 8.8.8.8, Ping: TimedOut, 0 ms
+hostname: www.google.de, IP: 8.8.8.8,  avg: 0,00 ms , Result: __________
 ````
 
 
@@ -63,16 +63,16 @@ After pressing any key ...
 
 ````
 dotnet UniversalNetworkChecker.dll UniversalNetworkCheckerConfig.json
-Universal Network Checker
 Hostname: A, IP: 192.168.10.3
-Hostname: B, IP: 10.81.76.94
-Hostname: C, IP: 192.168.10.200
+Hostname: B, IP: 192.168.10.100
+Hostname: www.google.de, IP: 8.8.8.8
 --------------------------
-hostname: A, IP: 192.168.10.3,  avg: 0,00 ms , Result: ____________________
-hostname: B, IP: 192.168.10.100,  avg: 0,00 ms , Result: |||||||||||||||||||| _
- Failure times: 13:02:57, 13:02:59, 13:03:01, 13:03:03, 13:03:05, 13:03:07, 13:03:09, 13:03:11, 13:03:13, 13:03:15, 13:03:17, 13:03:19, 13:03:21, 13:03:23, 13:03:25, 13:03:27, 13:03:29, 13:03:31, 13:03:33, 13:03:35, 13:03:37
-hostname: C, IP: 192.168.10.200,  avg: 0,00 ms , Result: ||||||||||||||||||||
- Failure times: 13:02:58, 13:03:00, 13:03:02, 13:03:04, 13:03:06, 13:03:08, 13:03:10, 13:03:12, 13:03:14, 13:03:16, 13:03:18, 13:03:20, 13:03:22, 13:03:24, 13:03:26, 13:03:28, 13:03:30, 13:03:32, 13:03:34, 13:03:36, 13:03:38
+hostname: A, IP: 192.168.10.3,  avg: 135,87 ms (min/median/max: 0,00 ms/2,00 ms/1005,00 ms), Result: ________|_|_|| (26,67 % loss)
+ Failure times: 20:00:55, 20:01:03, 20:01:11, 20:01:15ssms
+hostname: B, IP: 192.168.10.100,  avg: 68,47 ms (min/median/max: 0,00 ms/2,00 ms/1005,00 ms), Result: ________||_||_ (26,67 % loss)
+ Failure times: 20:00:56, 20:01:00, 20:01:08, 20:01:12 mssms
+hostname: www.google.de, IP: 8.8.8.8,  avg: 219,93 ms (min/median/max: 0,00 ms/23,00 ms/1030,00 ms), Result: __________|_|_ (13,33 % loss)
+ Failure times: 20:01:05, 20:01:13.8, Ping: Success, 18 msms
 ````
 
 ### Change Log
