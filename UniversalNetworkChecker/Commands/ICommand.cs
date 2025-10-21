@@ -7,7 +7,7 @@ public interface ICommand
 
     public void Parse();
 
-    public void Execute();
+    public async Task Execute() { }
 
     public void PrintHeader();
 

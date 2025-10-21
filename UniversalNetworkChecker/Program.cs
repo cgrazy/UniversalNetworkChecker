@@ -14,4 +14,4 @@ ICommand commandToExecute = commandFactory.Parse();
 
 commandToExecute.Parse();
 
-commandToExecute.Execute();
+await commandToExecute.Execute();

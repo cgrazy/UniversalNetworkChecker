@@ -38,7 +38,7 @@ internal class TraceRouteCommand : BaseCommand, ICommand
         myTraceRouteCommandOption.Parse();
     }
 
-    public new void Execute()
+    public async Task Execute()
     {
         base.Execute();
 

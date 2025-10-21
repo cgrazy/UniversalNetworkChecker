@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 internal class BaseCommand : ICommand
 {
@@ -35,7 +36,7 @@ internal class BaseCommand : ICommand
 
     public void Parse() { }
 
-    public void Execute()
+    public async Task Execute()
     {
         
         JFW.OutputAction = OutputAction;
@@ -72,8 +73,6 @@ internal class BaseCommand : ICommand
 
     public void PrintHeader()
     {
-        Console.WriteLine("a");
-
         JFW.HostsToCheck?.ForEach(h =>
         {
             OutputAction?.Invoke($"Hostname: {h.Hostname}, IP: {h.IP}");

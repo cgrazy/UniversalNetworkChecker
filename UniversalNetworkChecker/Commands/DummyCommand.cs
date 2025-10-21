@@ -20,7 +20,7 @@ internal class DummyCommand: ICommand
 
     public string Usage() { return ""; }
 
-    public void Execute()
+    public async Task Execute()
     {
         var pc = new PingCommand() { OutputAction = OutputAction };
         var nc = new NsLookupCommand() { OutputAction = OutputAction };

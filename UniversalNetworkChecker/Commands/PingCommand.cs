@@ -1,18 +1,21 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Text;
 using System.Threading.Tasks;
 
 internal class PingCommand : BaseCommand, ICommand
 {
     internal const string CommandName = "-ping";
 
-    private const string Obj = "                                                                         ";
+    private string Obj;
     PingCommandOption myPingCommandOption;
 
     internal PingCommand():base() { }
 
     internal PingCommand(List<string> args):base(args)
     {
+        Obj = new StringBuilder("", 500).ToString();
+
         myPingCommandOption = new PingCommandOption(args);
     }
 
@@ -35,8 +38,9 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption.StartTime = DateTime.Now;
     }
 
-    public new async Task Execute()
+    public async Task Execute()
     {
+        OutputAction?.Invoke("Executing Ping Command...");
         base.Execute();
         if (!base.IsInitialized) return;
 
@@ -90,14 +94,15 @@ internal class PingCommand : BaseCommand, ICommand
 
         base.JFW.HostsToCheck?.ForEach(h =>
         {
-            OutputAction?.Invoke(Obj);
             CurserAction?.Invoke(0, Console.CursorTop - 1);
+            OutputAction?.Invoke(Obj);
 
             OutputAction?.Invoke(resultsContainer.Results[h.Hostname].GetFullReport());
+
         });
 
-        OutputAction?.Invoke(Obj);
-
+        //OutputAction?.Invoke(Obj);
+        //OutputAction?.Invoke(Obj);
 
         myPingCommandOption.Result = resultsContainer;
         myPingCommandOption.JFW = JFW;

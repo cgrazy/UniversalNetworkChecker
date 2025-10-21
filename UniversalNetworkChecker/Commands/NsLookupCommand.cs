@@ -36,7 +36,7 @@ internal class NsLookupCommand : BaseCommand, ICommand
         OutputAction?.Invoke($"   -nslookup | -nslu : do a nslookup for all ip address configured in <file>.");
     }
 
-    public new void Execute()
+    public async Task Execute()
     {
         base.Execute();
 
