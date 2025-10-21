@@ -12,14 +12,14 @@
 
         PingRoundtripTime = new List<long>();
 
-        PingFailureTimes = new List<DateTime>();
+        PingFailureTimes = new List<string>();
     }
 
     internal List<bool> PingSuccess { get; set; }
 
     internal List<long> PingRoundtripTime { get; set; }
 
-    internal List<DateTime> PingFailureTimes { get; set; }
+    internal List<string> PingFailureTimes { get; set; }
 
 
     internal string GetOutputSting()
@@ -53,12 +53,12 @@
 
         string minMedianMax = string.Format("(min/median/max: {0:F2} ms/{1:F2} ms/{2:F2} ms)", min, median, max);
 
-        return string.Format($"hostname: {Hostname}, IP: {IP},  avg: {string.Format("{0:F2}", avg)} ms {minMedianMax}, Result: {lastTwentyResults} ({string.Format("{0:F2}", percentageLoss)} % loss) {failureTimes}");
+        return string.Format($"hostname: {Hostname}, IP: {IP},  avg: {$"{avg:F2}"} ms {minMedianMax}, Result: {lastTwentyResults} ({$"{percentageLoss:F2}"} % loss) {failureTimes}");
     }
 
     private string GetFailureTimes()
     {
-        return string.Join(", ", PingFailureTimes.Select(i=>i.ToString("T")));
+        return string.Join(", ", PingFailureTimes.Select(i => i.ToString()));
     }
 
 

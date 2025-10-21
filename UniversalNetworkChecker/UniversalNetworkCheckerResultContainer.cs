@@ -14,6 +14,6 @@ internal class UniversalNetworkCheckerResultContainer
         Results[hostname].PingSuccess.Add(reply.IsPingSuccessful.Value);
         Results[hostname].PingRoundtripTime.Add(reply.PingReply.RoundtripTime);
         if (!reply.IsPingSuccessful.Value)
-            Results[hostname].PingFailureTimes.Add(DateTime.Now);
+            Results[hostname].PingFailureTimes.Add(DateTime.Now.ToString());
     }
 }
