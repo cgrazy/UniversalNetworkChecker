@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Threading.Tasks;
+
 internal class PingCommand : BaseCommand, ICommand
 {
     internal const string CommandName = "-ping";
@@ -33,7 +35,7 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption.StartTime = DateTime.Now;
     }
 
-    public new void Execute()
+    public new async Task Execute()
     {
         base.Execute();
         if (!base.IsInitialized) return;
@@ -75,7 +77,7 @@ internal class PingCommand : BaseCommand, ICommand
                 }
             });
 
-            Delay();
+            await Delay();
 
             if (++cnt > 1)
             {
@@ -102,9 +104,9 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption.Run();
     }
 
-    private async void Delay()
+    private async Task Delay()
     {
-       Task t= Task.Delay(1000);
-       t.Wait();
+        Task t = Task.Delay(1000);
+       await t;       
     }
 }
