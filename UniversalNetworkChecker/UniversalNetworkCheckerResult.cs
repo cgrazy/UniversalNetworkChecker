@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text;
+﻿using System.Text;
 
 internal class UniversalNetworkCheckerResult
 {
@@ -10,12 +9,12 @@ internal class UniversalNetworkCheckerResult
     {
         Hostname = hostname;
         IP = ip;
-        Results = new List<PingResultWrapper>();
+        Results = new List<PingResult>();
 
         PingFailureTimes = new List<DateTime>();
     }
 
-    internal List<PingResultWrapper> Results { get; set; }
+    internal List<PingResult> Results { get; set; }
 
     internal List<DateTime> PingFailureTimes { get; set; }
 
@@ -63,9 +62,6 @@ internal class UniversalNetworkCheckerResult
 
     internal string GetFullReport()
     {
-        //Console.WriteLine(new StringBuilder("", 200).ToString());
-        //Console.SetCursorPosition(0, Console.CursorTop - Results.Count);
-
         string lastTwentyResults = string.Format("{0:s20}", GetPingSuccessString());
 
         string failureTimes = string.Empty;
@@ -94,49 +90,13 @@ internal class UniversalNetworkCheckerResult
 
     private string GetPingSuccessString()
     {
-        string resultString = string.Empty;
+        var sb = new StringBuilder();
+        var selectedResults = Results.Count > 20
+            ? Results.GetRange(Results.Count - 20, 20)
+            : Results.GetRange(0, Results.Count);
 
-        if (Results.Count > 20)
-        {
-            Results.GetRange(Results.Count - 20, 20).ForEach(i => resultString += (i.IsPingSuccessful) ? "_" : "|");
-        }
-        else
-        {
-            Results.GetRange(0, Results.Count - 1).ForEach(i => resultString += (i.IsPingSuccessful) ? "_" : "|");
-        }
+        selectedResults.ForEach(i => sb.Append(i.IsPingSuccessful ? "_" : "|"));
 
-        return resultString;
-    }
-}
-
-internal class PingResultWrapper
-{
-    internal long RoundTripTime { get; set; }
-    internal bool IsPingSuccessful { get; set; }
-
-    internal PingResultWrapper(long roundTripTime, bool isSuccessful)
-    {
-        RoundTripTime = roundTripTime;
-        IsPingSuccessful = isSuccessful;
-    }
-}
-
-internal class DataCalculator
-{
-    internal static double GetPercentageValueOf(int failure, int all)
-    {
-        return (double)failure / (double)all * 100;
-    }
-
-    internal static double GetMedianOfList(List<long> values)
-    {
-        values.Sort();
-
-        int size = values.Count;
-        int mid = size / 2;
-
-        double median = (size % 2 != 0) ? (double)values[mid] : ((double)values[mid] + (double)values[mid - 1]) / 2;
-
-        return median;
+        return sb.ToString();
     }
 }

@@ -8,8 +8,8 @@ internal class PingCommandOption : ArgsPars
     internal string OutFile = string.Empty;
     internal bool myAppendOutFile = false;
 
-    internal UniversalNetworkCheckerResultContainer Result { get; set; }
-    internal IJsonFileWrapper JFW { get; set; }
+    internal UniversalNetworkCheckerResultContainer? Result { get; set; }
+    internal IJsonFileWrapper? JFW { get; set; }
     internal DateTime StartTime { get; set; }
 
     internal override void Parse()

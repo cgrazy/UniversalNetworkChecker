@@ -26,19 +26,24 @@ internal class NsLookupCommand : BaseCommand, ICommand
         myDnsWrapper = new DnsWrapper();
     }
 
-    public string Usage()
+    public override void Parse()
+    {
+        base.Parse();
+    }
+
+    public override string Usage()
     {
         return "( -nslookup | -nslu )";
     }
 
-    public void Help()
+    public override void Help()
     {
         OutputAction?.Invoke($"   -nslookup | -nslu : do a nslookup for all ip address configured in <file>.");
     }
 
-    public async Task Execute()
+    internal override async Task Execute()
     {
-        base.Execute();
+        await base.Execute();
 
         if (!base.IsInitialized) return;
 

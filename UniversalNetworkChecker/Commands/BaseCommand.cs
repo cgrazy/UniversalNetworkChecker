@@ -18,9 +18,9 @@ internal class BaseCommand : ICommand
 
     }
 
-    public void Help() {  }
+    public virtual void Help() {  }
 
-    public string Usage() { return ""; }
+    public virtual string Usage() { return ""; }
 
     public BaseCommand(List<string> args)
     {
@@ -34,9 +34,9 @@ internal class BaseCommand : ICommand
         Args = args;
     }
 
-    public void Parse() { }
+    public virtual void Parse() { }
 
-    public async Task Execute()
+    internal virtual async Task Execute()
     {
         
         JFW.OutputAction = OutputAction;

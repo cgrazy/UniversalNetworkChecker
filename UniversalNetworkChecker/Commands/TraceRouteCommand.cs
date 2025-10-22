@@ -21,26 +21,26 @@ internal class TraceRouteCommand : BaseCommand, ICommand
         myTraceRouteCommandOption = new TraceRouteCommandOption(args);
     }
 
-    public new void Help()
+    public override void Help()
     {
         OutputAction?.Invoke($"   -traceroute | -tr : do a traceroute for all hostnames configured in <file>.");
         OutputAction?.Invoke($"     -long : Also tries to do a nslookup for the route ip determined.");
     }
 
-    public new string Usage()
+    public override string Usage()
     {
         return "( -traceroute | -tr [ -long ] )";
     }
 
-    public new void Parse()
+    public override void Parse()
     {
         base.Parse();
         myTraceRouteCommandOption.Parse();
     }
 
-    public async Task Execute()
+    internal override async Task Execute()
     {
-        base.Execute();
+        await base.Execute();
 
         PrintHeader();
 

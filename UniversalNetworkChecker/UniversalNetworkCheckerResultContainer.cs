@@ -11,10 +11,12 @@ internal class UniversalNetworkCheckerResultContainer
 
     internal void AddResult(string hostname, PingReplyWrapper reply)
     {
-        var result=new PingResultWrapper(reply.PingReply.RoundtripTime, reply.IsPingSuccessful.Value);
+        var success = reply.IsPingSuccessful.GetValueOrDefault();
+        var roundtrip = reply.PingReply?.RoundtripTime ?? 0L;
+        var result = new PingResult(roundtrip, success);
 
         Results[hostname].Results.Add(result);
-        if (!reply.IsPingSuccessful.Value)
+        if (!success)
             Results[hostname].PingFailureTimes.Add(DateTime.Now);
     }
 }

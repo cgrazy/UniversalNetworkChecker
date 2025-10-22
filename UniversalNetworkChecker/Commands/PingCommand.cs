@@ -19,29 +19,29 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption = new PingCommandOption(args);
     }
 
-    public string Usage()
+    public override string Usage()
     {
         return "( -ping [-out <outputFile> ] [ -append ] )";
     }
 
-    public void Help()
+    public override void Help()
     {
         OutputAction?.Invoke($"   -ping             : uses the ping to check the hosts configured in <file>.");
         OutputAction?.Invoke($"      -out <outputFile> : output file where whole opuput is written to.");
         OutputAction?.Invoke($"      -append : if not set a new file will be created, otherwise output will be appended.");
     }
 
-    public new void Parse()
+    public override void Parse()
     {
         base.Parse();
         myPingCommandOption.Parse();
         myPingCommandOption.StartTime = DateTime.Now;
     }
 
-    public async Task Execute()
+    internal override async Task Execute()
     {
         OutputAction?.Invoke("Executing Ping Command...");
-        base.Execute();
+        await base.Execute();
         if (!base.IsInitialized) return;
 
         PingWorker pingWrapper = new();
