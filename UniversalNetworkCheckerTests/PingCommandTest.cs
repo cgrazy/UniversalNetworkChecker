@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 
-namespace UniversalNetworkChecker.Commands.Tests
+namespace UniversalNetworkCheckerTests
 {
     [TestClass]
     public class PingCommandTest

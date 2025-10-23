@@ -21,10 +21,19 @@ internal class NsLookupCommand : BaseCommand, ICommand
         myDnsWrapper = dnsWrapperTestable;
     }
 
-    internal NsLookupCommand(List<string> args) : base(args)
+    internal NsLookupCommand(List<string> args) : this(args, new DnsWrapper(), null)
     {
-        myDnsWrapper = new DnsWrapper();
+
     }
+
+    internal NsLookupCommand(List<string> args, IDnsWrapper dnsWrapperTestable, List<Host> hostsToCheck) : base(args)
+    {
+        myDnsWrapper = dnsWrapperTestable;
+
+        myHostsToCheck = hostsToCheck ?? base.JFW.HostsToCheck; 
+    }
+
+    private List<Host> myHostsToCheck;
 
     public override void Parse()
     {
@@ -41,15 +50,25 @@ internal class NsLookupCommand : BaseCommand, ICommand
         OutputAction?.Invoke($"   -nslookup | -nslu : do a nslookup for all ip address configured in <file>.");
     }
 
+    internal virtual bool IsNsLookupCommandInitialized()
+    {
+        return base.IsInitialized;
+    }
+
     internal override async Task Execute()
     {
         await base.Execute();
 
-        if (!base.IsInitialized) return;
+        if (!IsNsLookupCommandInitialized()) return;
 
         base.PrintHeader();
 
-        base.JFW.HostsToCheck?.ForEach(h =>
+        await DoExecution();
+    }
+
+    internal async Task DoExecution()
+    {
+        myHostsToCheck?.ForEach(h =>
         {
 #pragma warning disable CS8604 // Possible null reference argument.
             string hostname = RetrieveHostnameFromIP(h.IP);
@@ -59,11 +78,9 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
             Hostname = hostname;
         });
-
-        
     }
 
-    internal virtual string RetrieveHostnameFromIP(string ip)
+    internal string RetrieveHostnameFromIP(string ip)
     {
         string hostname = string.Empty;
         try
