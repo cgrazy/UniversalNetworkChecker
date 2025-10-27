@@ -46,17 +46,20 @@ internal class BaseCommand : ICommand
             return;
         }
 
-        string fileToLoad = string.Empty;
-        if (Path.IsPathRooted(Args[0]))
+        string fileToLoad = Environment.ExpandEnvironmentVariables(Args[0]);
+
+        OutputAction?.Invoke($"file to load: {fileToLoad}");
+
+        if (Path.IsPathRooted(fileToLoad))
         {
-            fileToLoad = Args[0];
+            fileToLoad = Environment.ExpandEnvironmentVariables(Args[0]);
         }
-        else
-        {
+       //else
+       // {
 #pragma warning disable CS8604 // Possible null reference argument.
-            fileToLoad = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Args[0]);
+        //    fileToLoad = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fileToLoad);
 #pragma warning restore CS8604 // Possible null reference argument.
-        }
+        //}
 
         if (!File.Exists(fileToLoad))
         {

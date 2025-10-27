@@ -14,4 +14,13 @@ ICommand commandToExecute = commandFactory.Parse();
 
 commandToExecute.Parse();
 
-await commandToExecute.Execute();
+if (commandToExecute is PingCommand)
+{
+    await (commandToExecute as PingCommand).Execute();
+}
+else if (commandToExecute is NsLookupCommand)
+{
+    await (commandToExecute as NsLookupCommand).Execute();
+}
+
+
