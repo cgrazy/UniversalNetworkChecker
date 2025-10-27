@@ -22,23 +22,20 @@ internal class BaseCommand : ICommand
 
     public virtual string Usage() { return ""; }
 
-    public BaseCommand(List<string> args)
+    public BaseCommand(List<string> args):this(args, new JsonFileWrapper())
     {
-        JFW = new JsonFileWrapper();
-        Args = args;
     }
 
-    public BaseCommand(List<string>args, IJsonFileWrapper jsonFileWrapper)
+    public BaseCommand(List<string> args, IJsonFileWrapper jsonFileWrapper)
     {
         JFW = jsonFileWrapper;
         Args = args;
+
+        Initialize();
     }
-
-    public virtual void Parse() { }
-
-    internal virtual async Task Execute()
+    
+    internal virtual void Initialize()
     {
-        
         JFW.OutputAction = OutputAction;
 
         if (Args.Count < 1)
@@ -72,6 +69,14 @@ internal class BaseCommand : ICommand
         JFW.LoadJson(fileToLoad);
 
         this.IsInitialized = true;
+    }
+
+    public virtual void Parse() { }
+
+    internal virtual async Task Execute()
+    {
+        
+       
     }
 
     public void PrintHeader()

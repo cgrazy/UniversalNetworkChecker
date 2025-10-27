@@ -16,11 +16,21 @@ commandToExecute.Parse();
 
 if (commandToExecute is PingCommand)
 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
     await (commandToExecute as PingCommand).Execute();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 }
 else if (commandToExecute is NsLookupCommand)
 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
     await (commandToExecute as NsLookupCommand).Execute();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+}
+else if (commandToExecute is TraceRouteCommand)
+{
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+    await (commandToExecute as TraceRouteCommand).Execute();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 }
 
 

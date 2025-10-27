@@ -11,6 +11,8 @@ internal class NsLookupCommand : BaseCommand, ICommand
 
     internal string? Hostname { get; private set; }
 
+        private List<Host> myHostsToCheck;
+
     internal NsLookupCommand():base()
     {
         myDnsWrapper = new DnsWrapper();
@@ -33,7 +35,7 @@ internal class NsLookupCommand : BaseCommand, ICommand
         myHostsToCheck = hostsToCheck ?? base.JFW.HostsToCheck; 
     }
 
-    private List<Host> myHostsToCheck;
+
 
     public override void Parse()
     {

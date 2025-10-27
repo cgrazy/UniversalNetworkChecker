@@ -7,17 +7,31 @@ internal class PingCommand : BaseCommand, ICommand
 {
     internal const string CommandName = "-ping";
 
+    private List<Host>? myHostsToCheck;
+
     private string Obj;
     PingCommandOption myPingCommandOption;
 
-    internal PingCommand():base() { }
+    internal PingCommand():this(null, null) { }
 
-    internal PingCommand(List<string> args):base(args)
+    internal PingCommand(List<string> args) : this(args, null)
     {
         Obj = new StringBuilder("", 500).ToString();
 
         myPingCommandOption = new PingCommandOption(args);
     }
+    
+    internal PingCommand(List<string> args, List<Host> hostsToCheck) : base(args)
+    {
+        Obj = new StringBuilder("", 500).ToString();
+
+        myHostsToCheck = hostsToCheck ?? base.JFW.HostsToCheck;
+
+        Console.WriteLine($"abc: {base.JFW.HostsToCheck?.Count}");
+
+        myPingCommandOption = new PingCommandOption(args);
+    }
+
 
     public override string Usage()
     {
@@ -38,23 +52,19 @@ internal class PingCommand : BaseCommand, ICommand
         myPingCommandOption.StartTime = DateTime.Now;
     }
 
-    internal override async Task Execute()
+    internal async Task DoExecution()
     {
-        OutputAction?.Invoke("Executing Ping Command...");
-        await base.Execute();
-        if (!base.IsInitialized) return;
-
-        PingWorker pingWrapper = new();
-
-        PrintHeader();
-
         int cnt = 0;
 
         var resultsContainer = new UniversalNetworkCheckerResultContainer();
 
+        PingWorker pingWrapper = new();
+
+        OutputAction?.Invoke("Press any key to stop...");
+
         while (!Console.KeyAvailable)
         {
-            base.JFW.HostsToCheck?.ForEach(h =>
+            myHostsToCheck?.ForEach(h =>
             {
                 UniversalNetworkCheckerResult? tmp;
                 if (!resultsContainer.Results.TryGetValue(h.Hostname, out tmp))
@@ -92,7 +102,7 @@ internal class PingCommand : BaseCommand, ICommand
             }
         }
 
-        base.JFW.HostsToCheck?.ForEach(h =>
+        myHostsToCheck?.ForEach(h =>
         {
             CurserAction?.Invoke(0, Console.CursorTop - 1);
             OutputAction?.Invoke(Obj);
@@ -101,12 +111,20 @@ internal class PingCommand : BaseCommand, ICommand
 
         });
 
-        //OutputAction?.Invoke(Obj);
-        //OutputAction?.Invoke(Obj);
-
         myPingCommandOption.Result = resultsContainer;
         myPingCommandOption.JFW = JFW;
         myPingCommandOption.Run();
+    }
+
+    internal override async Task Execute()
+    {
+        OutputAction?.Invoke("Executing Ping Command...");
+        await base.Execute();
+        if (!base.IsInitialized) return;
+
+        PrintHeader();
+
+        await DoExecution();        
     }
 
     private async Task Delay()
