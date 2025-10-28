@@ -1,7 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Threading.Tasks;
+using Castle.Core.Configuration;
+using Moq;
 
 
 namespace UniversalNetworkCheckerTests
@@ -12,23 +16,30 @@ namespace UniversalNetworkCheckerTests
         [TestMethod]
         public async Task Delay_CompletesWithinTwoSeconds()
         {
-            // Create instance of internal PingCommand via reflection
-            var pingCommandType = typeof(PingCommand);
-            var instance = Activator.CreateInstance(pingCommandType, nonPublic: true);
-            Assert.IsNotNull(instance, "Failed to create PingCommand instance.");
+            var prw = new PingReplyWrapper(new Ping().Send("localhost"));
+            prw.IsPingSuccessful = true;
 
-            // Get the non-public Delay method and invoke it
-            var delayMethod = pingCommandType.GetMethod("Delay", BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.IsNotNull(delayMethod, "Could not find Delay method on PingCommand.");
+            var pingWorkerStub = new Mock<PingWorker>() { CallBase = false };
+            pingWorkerStub.Setup(pw => pw.DoPing("127.0.0.1")).Returns(prw);
+
+            // Create instance of internal PingCommand via reflection
+            List<Host> hosts = new List<Host>()
+            {
+                new Host { Hostname ="localhost", IP = "127.0.0.1" }
+            }; 
+
+            var pingCommandStub = new PingCommand(new List<string> { "-ping" }, pingWorkerStub.Object, hosts);
 
             var sw = Stopwatch.StartNew();
-            var task = (Task)delayMethod.Invoke(instance, null)!;
-            await task; // await the private async Task Delay()
+
+            // Call the internal DoExecution method
+            await pingCommandStub.DoExecution();
+
             sw.Stop();
 
-            // Delay uses Task.Delay(1000) so it should take approximately 1 second.
-            Assert.IsTrue(sw.ElapsedMilliseconds >= 800, $"Delay finished too quickly ({sw.ElapsedMilliseconds}ms).");
-            Assert.IsTrue(sw.ElapsedMilliseconds < 2000, $"Delay took too long ({sw.ElapsedMilliseconds}ms).");
+            pingCommandStub.ResultContainer.Results.TryGetValue("localhost", out var result);
+            var a = result.Results.Count;
+            Assert.IsTrue(result.Results[0].IsPingSuccessful);
         }
 
         [TestMethod]

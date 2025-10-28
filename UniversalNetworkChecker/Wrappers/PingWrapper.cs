@@ -15,7 +15,7 @@ internal class PingWorker
         ping = new PingWrapper();
     }
 
-    internal IPingReplyWrapper DoPing(string ip)
+    internal virtual IPingReplyWrapper DoPing(string ip)
     {
         return ping.Send(ip);
     }
@@ -74,6 +74,11 @@ public class PingReplyWrapper : IPingReplyWrapper
         IsPingSuccessful = pingReply.Status == IPStatus.Success;
 
         PingReply = pingReply;
+    }
+
+    internal PingReplyWrapper()
+    {
+        IsPingSuccessful = true;
     }
 
     public override bool Equals(object? obj)

@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,26 +11,32 @@ internal class PingCommand : BaseCommand, ICommand
     private List<Host>? myHostsToCheck;
 
     private string Obj;
-    PingCommandOption myPingCommandOption;
+    private PingCommandOption myPingCommandOption;
 
-    internal PingCommand():this(null, null) { }
+    internal UniversalNetworkCheckerResultContainer ResultContainer { get; private set; }
 
-    internal PingCommand(List<string> args) : this(args, null)
+    internal PingCommand() : this(null, null, null) { }
+    
+    private PingWorker myPingWorker;
+
+    internal PingCommand(List<string> args) : this(args, new PingWorker(), null)
     {
         Obj = new StringBuilder("", 500).ToString();
 
         myPingCommandOption = new PingCommandOption(args);
     }
     
-    internal PingCommand(List<string> args, List<Host> hostsToCheck) : base(args)
+    internal PingCommand(List<string> args, PingWorker pingWorker, List<Host> hostsToCheck) : base(args)
     {
-        Obj = new StringBuilder("", 500).ToString();
+        Obj = new StringBuilder("", 700).ToString();
+
+        myPingWorker = pingWorker;
 
         myHostsToCheck = hostsToCheck ?? base.JFW.HostsToCheck;
 
-        Console.WriteLine($"abc: {base.JFW.HostsToCheck?.Count}");
-
         myPingCommandOption = new PingCommandOption(args);
+
+        ResultContainer = new UniversalNetworkCheckerResultContainer();
     }
 
 
@@ -54,67 +61,45 @@ internal class PingCommand : BaseCommand, ICommand
 
     internal async Task DoExecution()
     {
-        int cnt = 0;
-
-        var resultsContainer = new UniversalNetworkCheckerResultContainer();
-
-        PingWorker pingWrapper = new();
-
-        OutputAction?.Invoke("Press any key to stop...");
-
-        while (!Console.KeyAvailable)
-        {
-            myHostsToCheck?.ForEach(h =>
-            {
-                UniversalNetworkCheckerResult? tmp;
-                if (!resultsContainer.Results.TryGetValue(h.Hostname, out tmp))
-                {
-#pragma warning disable CS8604 // Possible null reference argument.
-                    resultsContainer.Results.Add(h.Hostname, new UniversalNetworkCheckerResult(h.Hostname, h.IP));
-#pragma warning restore CS8604 // Possible null reference argument.
-                }
-                else
-                {
-#pragma warning disable CS8604 // Possible null reference argument.
-                    var task = new Task<IPingReplyWrapper>(() => pingWrapper.DoPing(h.IP));
-#pragma warning restore CS8604 // Possible null reference argument.
-
-                    task.Start();
-
-                    task.WaitAsync(TimeSpan.FromSeconds(2));
-                    PingReplyWrapper reply = (PingReplyWrapper)task.Result;
-
-                    resultsContainer.AddResult(h.Hostname, reply);
-
-                    OutputAction?.Invoke(resultsContainer.Results[h.Hostname].GetOutputSting());
-                    OutputAction?.Invoke($"Hostname: {h.Hostname}, IP: {h.IP}, Ping: {reply.PingReply.Status}, {reply.PingReply.RoundtripTime} ms");
-                }
-            });
-
-            await Delay();
-
-            if (++cnt > 1)
-            {
-                int s = (JFW.HostsToCheck != null) ? JFW.HostsToCheck.Count : 0;
-                int offset = Console.CursorTop - s * 2;
-
-                CurserAction?.Invoke(0, offset);
-            }
-        }
-
         myHostsToCheck?.ForEach(h =>
         {
-            CurserAction?.Invoke(0, Console.CursorTop - 1);
-            OutputAction?.Invoke(Obj);
+            UniversalNetworkCheckerResult? tmp;
+            if (!ResultContainer.Results.TryGetValue(h.Hostname, out tmp))
+            {
+#pragma warning disable CS8604 // Possible null reference argument.
+                ResultContainer.Results.Add(h.Hostname, new UniversalNetworkCheckerResult(h.Hostname, h.IP));
+#pragma warning restore CS8604 // Possible null reference argument.
+            }
+            //else
+            {
+#pragma warning disable CS8604 // Possible null reference argument.
+                var task = new Task<IPingReplyWrapper>(() => myPingWorker.DoPing(h.IP));
+#pragma warning restore CS8604 // Possible null reference argument.
 
-            OutputAction?.Invoke(resultsContainer.Results[h.Hostname].GetFullReport());
+                task.Start();
 
+                task.WaitAsync(TimeSpan.FromSeconds(2));
+                PingReplyWrapper reply = (PingReplyWrapper)task.Result;
+
+                ResultContainer.AddResult(h.Hostname, reply);
+
+                OutputAction?.Invoke(ResultContainer.Results[h.Hostname].GetOutputSting());
+                OutputAction?.Invoke($"Hostname: {h.Hostname}, IP: {h.IP}, Ping: {reply.PingReply.Status}, {reply.PingReply.RoundtripTime} ms.   ");
+            }
         });
 
-        myPingCommandOption.Result = resultsContainer;
-        myPingCommandOption.JFW = JFW;
-        myPingCommandOption.Run();
+        await Delay();
+
+        if (++myCounter > 0)
+        {
+            int s = (myHostsToCheck != null) ? myHostsToCheck.Count : 0;
+            int offset = Console.CursorTop - s * 2;
+
+            CurserAction?.Invoke(0, offset);
+        }
     }
+
+    int myCounter = 0;
 
     internal override async Task Execute()
     {
@@ -124,7 +109,30 @@ internal class PingCommand : BaseCommand, ICommand
 
         PrintHeader();
 
-        await DoExecution();        
+        OutputAction?.Invoke("Press any key to stop...");
+
+        myCounter = 0;
+
+        while (!Console.KeyAvailable)
+        {
+            await DoExecution();
+        }
+
+        myHostsToCheck?.ForEach(h =>
+        {
+           CurserAction?.Invoke(0, Console.CursorTop - 1);
+           OutputAction?.Invoke(Obj);
+
+           UniversalNetworkCheckerResult? tmp;
+           if (ResultContainer.Results.TryGetValue(h.Hostname, out tmp))
+           {
+               OutputAction?.Invoke(tmp.GetFullReport());
+           }
+        });
+
+        myPingCommandOption.Result = ResultContainer;
+        myPingCommandOption.JFW = JFW;
+        myPingCommandOption.Run();
     }
 
     private async Task Delay()
