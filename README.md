@@ -13,7 +13,7 @@ For every success a '_' is printed, in case of failure '|'. Up to 20 pings are r
 ````
 Usage:
 
-dotnet UniversalNetworkChecker.dll <file>  ( -ping [-out <outputFile> ] [ -append ] ) | ( -nslookup | -nslu ) | ( -traceroute | -tr [ -long ] )
+dotnet unc.dll <file>  ( -ping [-out <outputFile> ] [ -append ] ) | ( -nslookup | -nslu ) | ( -traceroute | -tr [ -long ] )
    <file>            : json file containg the hosts to check.
    -ping             : uses the ping to check the hosts configured in <file>.
       -out <outputFile> : output file where whole opuput is written to.
